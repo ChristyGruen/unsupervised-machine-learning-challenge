@@ -4,46 +4,60 @@
 
 ## **Purpose**
 
-You are on the data science team of a medical research company that’s interested in finding better ways to predict myopia, or nearsightedness. Your team has tried—and failed—to improve their classification model when training on the whole dataset. However, they believe that there might be distinct groups of patients that would be better to analyze separately. So, your supervisor has asked you to explore this possibility by using unsupervised learning.
+    You are on the data science team of a medical research company that’s interested in finding better ways to predict myopia, or nearsightedness. Your team has tried—and failed—to improve their classification model when training on the whole dataset. However, they believe that there might be distinct groups of patients that would be better to analyze separately. So, your supervisor has asked you to explore this possibility by using unsupervised learning.
 
-Clean the data and use unsupervised learning to determine whether the myopia patients can be grouped for further analysis.  
+    Clean the data and use unsupervised learning to determine whether the myopia patients can be grouped for further analysis.  
 
 ## **Process**
  
 ### ***Prepare Data***
-Follow Data Preparation Cheat Sheet below.
-check for nulls (full dataset - no nulls)
-check data types
-check for duplicates
-remove Myopic column (already clustered)
-remove mommy and dadmy cols (already at scale), scale, then replce mommy and dadmy cols 
+    The Myopia dataset contains diagnosis classification information (Myopic column) that was removed to use the dataset for unsupervised learning.  
+    Data was checked for categorical data, duplicates, and nulls. No cleaning required.
+    Data was scaled using Standard Scaler and saved to "MyopiaCleanData.csv".
 
 ### ***Reduce Dimensions***
-Use PCA to reduce dimensions while retaining 90% of the explained variance.
-    Data set reduced from 14 columns to 9 columns of data.
-Use t-SNE to further reduce dimensions with a learning rate of 35, then with a learning rate of 80.  Run each t-SNE analysis 5x to evaluate run to run variability.
-    Data set reduced from 9 columns to two features independent of learning rate.
-    Charted data varies from run to run, but seems to show two separate clusters of data.  These clusters do not correspond with the actual clinical diagnosis as represented in the "Myopic" column.
+    Scaled data dimensions were reduced from 14 to 9 using PCA while retaining 92% of the explained variance. 
+
+    The Scaled PCS reduced data dimensions were further reduced from 9 to 2 using t-SNE at two learning rates (35 and 80).  Each t-SNE analysis was run 5x to evaluate run to run variability. Charted data varies from run to run, but seems to show two separate clusters of data. 
+
 ### ***Cluster Analysis***
-Use an elbow curve to identify the best number of clusters.
-    Slight elbow at 3 clusters.
-Plot each column against each column for 3,4,5,6, and 7 clusters. 
-    Separation between clusters with DIOPTERHR, ACD, AL and LT.  Potential linear relationship between AL and VCD
-For final analysis: use 3 clusters and plot DIOPTERHR vs AL
+    Scaled data was evaluated using an elbow curve to identify the best number of clusters to use for analysis. There is a slight elbow at three clusters.
+
+    The K-means model was fit with n_clusters = 3 and random_state = 0 and the data was plotted for features "AL" and "DIOPTERHR".
 
 ## **Results**
-The PCA/t-SNE dimension reduction resulted in 
 
----
+### ***PCA t-SNE Dimension Reduction***
+<img src= "Resources/t-SNE_learn35.png" alt = 't-SNE 2D chart with two indistinct groups' width = '60%'>
+
+The PCA/t-SNE dimension reduction resulted in one large cluster and one small cluster in the 2D space.
+
+### ***K-means Cluster Analysis***
+<img src = 'Resources/KClusters_3.png' alt = 'K-means chart with three distinct clusters' width = '60%'>
+
+The K-means model (k=3) produced three visually distinct clusters.
 
 ## **Conclusion**
 
-<p></p>
-<p></p>
+    The myopia patient data can be grouped using PCA/t-SNE or K-means for further analysis.
+
+
+## **Today I learned**
+    Even though the data can be grouped for further analysis, these groupings do not correspond with the actual clinical diagnosis as listed in the "Myopic" column from the original data (represented by yellow and purple in the charts below).  
+
+### ***PCA t-SNE Dimension Reduction colored by Myopic diagnosis***
+<img src= "Resources/t-SNE_learn35_myopic.png" alt = 't-SNE 2D chart colored by myopic classification. Myopic data is not separated in 2D space.' width = '60%'>
+
+t-SNE is a dimension reduction tool to allow for visualization of multi-dimensional data in 2D or 3D and is not a classification tool.  
+
+### ***K-means Cluster Analysis colored by Myopic diagnosis***
+<img src = 'Resources/KClusters_3_myopic.png' alt = 'K-means cluster chart colored by myopic classification.  Myopic data is evenly separated throughout the three groups.' width = '60%'>
+
+K-means is a clustering tool that maximizes between-cluster distances and is not a classification tool.
 
 ---
 
-## **Start a Data Preparation Cheat Sheet**
+# **Start a Data Preparation Cheat Sheet**
 Data Preparation Cheat Sheet
 1. check datatypes (numeric cols may have non-numeric info that needs to be removed, data types may need to be changed) 
     df.dtypes
